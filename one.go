@@ -135,7 +135,11 @@ func calculateHandler(w http.ResponseWriter, r *http.Request) {
             w.WriteHeader(http.StatusInternalServerError)
         }
     } else {
-        resBody.Result = fmt.Sprintf("%f", result)
+        if result == float64(int(result)) {
+            resBody.Result = fmt.Sprintf("%d", int(result))
+        } else {
+            resBody.Result = fmt.Sprintf("%f", result)
+        }
         w.WriteHeader(http.StatusOK)
     }
 
@@ -150,6 +154,7 @@ func main() {
         fmt.Println("Server failed to start:", err)
     }
 }
+
 
 
 //http://localhost:8080/api/v1/calculate
