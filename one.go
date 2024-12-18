@@ -15,7 +15,7 @@ import (
 func Calc(expression string) (float64, error) {
 	expression = strings.ReplaceAll(expression, " ", "")
 	if !regexp.MustCompile(`^[\d+\-*/().]+$`).MatchString(expression) {
-		return 0, errors.New("честары невалидны!!!")
+		return 0, errors.New("Знаки невалидны!!!")
 	}
 
 	tokens, err := tokenize(expression)
@@ -63,7 +63,6 @@ func tokenize(expression string) ([]string, error) {
 	return tokens, nil
 }
 
-
 func shuntingYard(tokens []string) ([]string, error) {
 	precedence := map[string]int{
 		"+": 1, "-": 1, "*": 2, "/": 2,
@@ -108,7 +107,6 @@ func shuntingYard(tokens []string) ([]string, error) {
 
 	return output, nil
 }
-
 
 func evaluateRPN(tokens []string) (float64, error) {
 	var stack []float64
@@ -220,8 +218,5 @@ func main() {
 		log.Fatalln("Server failed to start:", err)
 	}
 }
-
-
-
 
 //http://localhost:8080/api/v1/calculate
