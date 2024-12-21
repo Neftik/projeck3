@@ -15,7 +15,7 @@ import (
 func Calc(expression string) (float64, error) {
 	expression = strings.ReplaceAll(expression, " ", "")
 	if !regexp.MustCompile(`^[\d+\-*/().]+$`).MatchString(expression) {
-		return 0, errors.New("Знаки невалидны!!!")
+		return 0, errors.New("Value Invalid")
 	}
 
 	tokens, err := tokenize(expression)

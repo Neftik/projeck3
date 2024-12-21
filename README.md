@@ -204,5 +204,3 @@ curl --location 'http://localhost:8080/api/v1/calculate' \
      "expression": "(3+5"
    }'
    ```
-
-По всем вопросам или проблемам обращайтесь к поддерживающему проект.
