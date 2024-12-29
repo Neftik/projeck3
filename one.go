@@ -138,7 +138,7 @@ func evaluateRPN(tokens []string) (float64, error) {
 				if b == 0 {
 					return 0, errors.New("division by zero")
 				}
-				result = a / b
+				result = a / b			
 			default:
 				return 0, fmt.Errorf("invalid operator '%s'", token)
 			}
