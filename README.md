@@ -1,46 +1,36 @@
-
-# Сервис Калькулятор
+### Сервис Калькулятор
 
 Этот проект представляет собой простой HTTP-сервер, который вычисляет математические выражения, предоставленные в формате JSON. Сервер поддерживает базовые арифметические операции, включая сложение, вычитание, умножение и деление, а также обработку некорректных входных данных и ошибок.
 
-## Функционал
-
+### Функционал
 - Поддержка базовых арифметических выражений: `+`, `-`, `*`, `/` и скобок.
 - Понятные сообщения об ошибках для некорректных выражений или неподдерживаемых операций.
-- Обработка краевых случаев, таких как division by zero или несоответствующие скобки.
+- Обработка краевых случаев, таких как деление на ноль или несоответствующие скобки.
 - Удобный API с использованием формата JSON для запросов и ответов.
 
----
+### Использование API
+#### Эндпоинт
+**POST** `/api/v1/calculate`
 
-## Использование API
-
-### Эндпоинт
-
-`POST /api/v1/calculate`
-
-### Тело запроса
-
+#### Тело запроса
 Отправьте JSON-объект со следующей структурой:
-
 ```json
 {
   "expression": "<арифметическое выражение>"
 }
 ```
 
-### Ответ
-
-#### Успешно
+#### Ответ
+##### Успешно
 - **HTTP Код состояния**: `200 OK`
 - **Тело ответа**:
-  ```json
-  {
-    "result": "<результат вычисления>"
-  }
-  ```
+```json
+{
+  "result": "<результат вычисления>"
+}
+```
 
-#### Ошибки
-
+##### Ошибки
 - **Неверный метод**:
   - **HTTP Код состояния**: `405 Method Not Allowed`
   - **Тело ответа**:
@@ -50,7 +40,7 @@
     }
     ```
 
-- **Invalid request body**:
+- **Неверное тело запроса**:
   - **HTTP Код состояния**: `400 Bad Request`
   - **Тело ответа**:
     ```json
@@ -68,7 +58,7 @@
     }
     ```
 
-- **Ошибка обработки (422)**:
+- **Ошибка обработки**:
   - **HTTP Код состояния**: `422 Unprocessable Entity`
   - **Тело ответа**:
     ```json
@@ -78,18 +68,13 @@
     ```
 
 ### Примеры
-
 #### Успешное вычисление
-
 ```bash
-curl --location 'http://localhost:8080/api/v1/calculate' \
---header 'Content-Type: application/json' \
---data '{
+curl --location 'http://localhost:8080/api/v1/calculate' --header 'Content-Type: application/json' --data '{
   "expression": "2+2*2"
 }'
 ```
-
-**Ответ**:
+Ответ:
 ```json
 {
   "result": "6"
@@ -97,16 +82,12 @@ curl --location 'http://localhost:8080/api/v1/calculate' \
 ```
 
 #### Деление на ноль
-
 ```bash
-curl --location 'http://localhost:8080/api/v1/calculate' \
---header 'Content-Type: application/json' \
---data '{
+curl --location 'http://localhost:8080/api/v1/calculate' --header 'Content-Type: application/json' --data '{
   "expression": "1/0"
 }'
 ```
-
-**Ответ**:
+Ответ:
 ```json
 {
   "error": "division by zero"
@@ -114,16 +95,12 @@ curl --location 'http://localhost:8080/api/v1/calculate' \
 ```
 
 #### Некорректное выражение
-
 ```bash
-curl --location 'http://localhost:8080/api/v1/calculate' \
---header 'Content-Type: application/json' \
---data '{
+curl --location 'http://localhost:8080/api/v1/calculate' --header 'Content-Type: application/json' --data '{
   "expression": "2+*2"
 }'
 ```
-
-**Ответ**:
+Ответ:
 ```json
 {
   "error": "processing error: invalid token '*'"
@@ -131,32 +108,23 @@ curl --location 'http://localhost:8080/api/v1/calculate' \
 ```
 
 #### Пустое выражение
-
 ```bash
-curl --location 'http://localhost:8080/api/v1/calculate' \
---header 'Content-Type: application/json' \
---data '{
+curl --location 'http://localhost:8080/api/v1/calculate' --header 'Content-Type: application/json' --data '{
   "expression": ""
 }'
 ```
-
-**Ответ**:
+Ответ:
 ```json
 {
   "error": "Expression cannot be empty"
 }
 ```
 
----
+### Как запустить
+#### Требования
+- Установленный Go (версия 1.18 или выше).
 
-## Как запустить
-
-### Требования
-
-- Установленный [Go](https://golang.org/) (версия 1.18 или выше).
-
-### Шаги
-
+#### Шаги
 1. Клонируйте репозиторий:
    ```bash
    git clone <repository-url>
@@ -170,37 +138,64 @@ curl --location 'http://localhost:8080/api/v1/calculate' \
 
 3. Сервер запустится на `http://localhost:8080`.
 
-4. Используйте инструменты, такие как `curl` или Postman, для взаимодействия с API.
+4. Используйте инструменты, такие как curl или Postman, для взаимодействия с API.
 
----
+### Тестирование сервиса
+#### Примеры сценариев
+- **Корректное выражение**:
+  ```bash
+  curl --location 'http://localhost:8080/api/v1/calculate'   --header 'Content-Type: application/json'   --data '{
+    "expression": "3+(4*5)-7"
+  }'
+  ```
 
-## Тестирование сервиса
+- **Некорректный токен**:
+  ```bash
+  curl --location 'http://localhost:8080/api/v1/calculate'   --header 'Content-Type: application/json'   --data '{
+    "expression": "3+abc"
+  }'
+  ```
 
-### Примеры сценариев
+- **Несоответствующие скобки**:
+  ```bash
+  curl --location 'http://localhost:8080/api/v1/calculate'   --header 'Content-Type: application/json'   --data '{
+    "expression": "(3+5"
+  }'
+  ```
 
-1. **Корректное выражение**:
+### Как работают тесты
+Тесты для сервиса калькулятора проверяют следующие аспекты:
+
+1. **Функция Calc:**
+   - Проверяет корректность вычисления выражений, таких как `2+2`, `2-3`, `6/3`.
+   - Обрабатывает ошибки для некорректных выражений, например, `2+`, `2/0`.
+   - Убеждается, что результат вычисления совпадает с ожидаемым значением.
+
+2. **Функция tokenize:**
+   - Убедитесь, что выражение, например, `(2+3)*4`, правильно разделяется на токены: `["(", "2", "+", "3", ")", "*", "4"]`.
+
+3. **Обработчик HTTP-запросов (calculateHandler):**
+   - Проверяет различные сценарии:
+     - Успешное вычисление: запрос с телом `{"expression": "2+2"}` возвращает `200 OK` и результат `{"result": "4"}`.
+     - Ошибка обработки (например, деление на ноль): возвращает `422 Unprocessable Entity` и сообщение об ошибке.
+     - Неверное тело запроса или пустое выражение: возвращает `400 Bad Request`.
+   - Проверяет, что код ответа и тело ответа соответствуют ожидаемым значениям.
+
+Тесты обеспечивают стабильность работы сервиса, проверяя корректность вычислений, обработки ошибок и соответствие API спецификации.
+
+### Как запустить тесты
+#### Требования
+- Установленный Go.
+
+#### Шаги
+1. Перейдите в корневую директорию проекта:
    ```bash
-   curl --location 'http://localhost:8080/api/v1/calculate' \
-   --header 'Content-Type: application/json' \
-   --data '{
-     "expression": "3+(4*5)-7"
-   }'
+   cd <repository-directory>
    ```
 
-2. **Некорректный токен**:
+2. Запустите тесты с помощью команды:
    ```bash
-   curl --location 'http://localhost:8080/api/v1/calculate' \
-   --header 'Content-Type: application/json' \
-   --data '{
-     "expression": "3+abc"
-   }'
+   go test ./...
    ```
 
-3. **Несоответствующие скобки**:
-   ```bash
-   curl --location 'http://localhost:8080/api/v1/calculate' \
-   --header 'Content-Type: application/json' \
-   --data '{
-     "expression": "(3+5"
-   }'
-   ```
+3. Результаты выполнения тестов отобразятся в консоли. В случае успешного прохождения будет выведено `ok`, а в случае ошибок — подробная информация о причинах их возникновения.
